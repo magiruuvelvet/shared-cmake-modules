@@ -1,6 +1,8 @@
-project(c-test D)
-
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/../..")
+
+include(EnableD)
+
+project(c-test D)
 
 include(CreateTarget)
 

@@ -1,18 +1,24 @@
 include(SetCppStandard)
 include(SetCStandard)
 
-macro(CreateTarget CMakeTargetName Type OutputName CppVer)
+macro(CreateTarget CMakeTargetName Type OutputName Language LanguageVersion)
     # grep files from current directory
-    if (NOT ${CppVer} EQUAL 0)
+    if (${Language} STREQUAL "C++")
         file(GLOB_RECURSE SourceList
             "*.cpp"
             "*.hpp"
         )
-    else()
+    elseif(${Language} STREQUAL "C")
         file(GLOB_RECURSE SourceList
             "*.c"
             "*.h"
         )
+    elseif(${Language} STREQUAL "D")
+        file(GLOB_RECURSE SourceList
+            "*.d"
+        )
+    else()
+        message(FATAL_ERROR "CreateTarget: unsupported language: ${Language}")
     endif()
 
     # create target
@@ -30,14 +36,18 @@ macro(CreateTarget CMakeTargetName Type OutputName CppVer)
     set_target_properties(${CMakeTargetName} PROPERTIES PREFIX "")
     set_target_properties(${CMakeTargetName} PROPERTIES OUTPUT_NAME "${OutputName}")
 
-    if (NOT ${CppVer} EQUAL 0)
+    if (${Language} STREQUAL "C++")
         # sets the required C++ version on the target
-        SetCppStandard(${CMakeTargetName} ${CppVer})
+        SetCppStandard(${CMakeTargetName} ${LanguageVersion})
         set_target_properties(${CMakeTargetName} PROPERTIES LINKER_LANGUAGE CXX)
-    else()
+    elseif(${Language} STREQUAL "C")
         # sets the required C version on the target
-        SetCStandard(${CMakeTargetName} 11)
+        SetCStandard(${CMakeTargetName} ${LanguageVersion})
         set_target_properties(${CMakeTargetName} PROPERTIES LINKER_LANGUAGE C)
+    elseif(${Language} STREQUAL "D")
+        # register support for the D programming language in CMake
+        set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/LanguageSupport/D" "${CMAKE_MODULE_PATH}")
+        set_target_properties(${CMakeTargetName} PROPERTIES LINKER_LANGUAGE D)
     endif()
 
     # add current directory to include paths of the target

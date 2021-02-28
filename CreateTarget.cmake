@@ -45,8 +45,6 @@ macro(CreateTarget CMakeTargetName Type OutputName Language LanguageVersion)
         SetCStandard(${CMakeTargetName} ${LanguageVersion})
         set_target_properties(${CMakeTargetName} PROPERTIES LINKER_LANGUAGE C)
     elseif(${Language} STREQUAL "D")
-        # register support for the D programming language in CMake
-        set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/LanguageSupport/D" "${CMAKE_MODULE_PATH}")
         set_target_properties(${CMakeTargetName} PROPERTIES LINKER_LANGUAGE D)
     endif()
 

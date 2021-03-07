@@ -16,6 +16,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_LIST_DIR}")
 # include macros
 include(CreateTarget)
 include(MacroEnsureOutOfSourceBuild)
+include(ProjectSetupFunctions)
 
 # ensure out of source builds
 EnsureOutOfSourceBuild()
@@ -29,6 +30,10 @@ include_directories(${PROJECT_GENERATED_DIR})
 set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Set the CMake configuration type to use")
 message(STATUS "Using configuration type: ${CMAKE_BUILD_TYPE}")
 set(CMAKE_CONFIGURATION_TYPES ${CMAKE_BUILD_TYPE})
+
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
+    message(FATAL_ERROR "Configuration type is empty, please explicitly specify the configuration type to use. (Debug Release RelWithDebInfo)")
+endif()
 
 # set position independent code for languages and targets which support it
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -61,18 +66,18 @@ if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
 endif()
 
 # call this after a project was initialized
-macro(DetectAdditionalDebugOptions)
-    if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-        if ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
-            message(STATUS "C: LLVM/clang detected. Enabling LLDB debugger tuning...")
-            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -glldb")
-        endif()
-        if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-            message(STATUS "C++: LLVM/clang detected. Enabling LLDB debugger tuning...")
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -glldb")
-        endif()
-    endif()
+macro(ProjectSetupDetectAdditionalDebugOptions)
+    ProjectSetupClangDebuggerTuningC()
+    ProjectSetupClangDebuggerTuningCxx()
 endmacro()
+
+# enable debugger tuning if the compiler was already identified (ProjectSetup called after project)
+if (NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "")
+    ProjectSetupClangDebuggerTuningC()
+endif()
+if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "")
+    ProjectSetupClangDebuggerTuningCxx()
+endif()
 
 # set target destination for built targets
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib-static)

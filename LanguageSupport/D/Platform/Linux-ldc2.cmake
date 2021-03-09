@@ -37,6 +37,8 @@ set(CMAKE_LIBRARY_PATH_FLAG "-L-L")
 set(CMAKE_LIBRARY_PATH_TERMINATOR "")  # for the Digital Mars D compiler the link paths have to be terminated with a "/"
 set(CMAKE_LINK_LIBRARY_FLAG "-L-l")
 
+set(CMAKE_D_COMPILE_OPTIONS_PIC "--relocation-model=pic")
+
 set(CMAKE_LINK_LIBRARY_SUFFIX "")
 set(CMAKE_STATIC_LIBRARY_PREFIX "lib")
 set(CMAKE_STATIC_LIBRARY_SUFFIX ".a")

@@ -59,6 +59,11 @@ macro(CreateTarget CMakeTargetName Type OutputName Language LanguageVersion)
     target_include_directories(${CMakeTargetName} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/${SourceListPrefix}")
     target_include_directories(${CMakeTargetName}_ginterface INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/${SourceListPrefix}")
 
+    # link target to interface
+    if (NOT ${Type} STREQUAL "EXECUTABLE")
+        target_link_libraries(${CMakeTargetName}_ginterface INTERFACE ${CMakeTargetName})
+    endif()
+
     # export variable with the current target source directory
     set(CURRENT_TARGET_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 endmacro()

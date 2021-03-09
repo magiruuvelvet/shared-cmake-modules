@@ -2,20 +2,22 @@ include(SetCppStandard)
 include(SetCStandard)
 
 macro(CreateTarget CMakeTargetName Type OutputName Language LanguageVersion)
+    message(STATUS "Creating ${Language}${LanguageVersion} target: ${CMakeTargetName}")
+
     # grep files from current directory
     if (${Language} STREQUAL "C++")
         file(GLOB_RECURSE SourceList
-            "*.cpp"
-            "*.hpp"
+            "${SourceListPrefix}*.cpp"
+            "${SourceListPrefix}*.hpp"
         )
     elseif(${Language} STREQUAL "C")
         file(GLOB_RECURSE SourceList
-            "*.c"
-            "*.h"
+            "${SourceListPrefix}*.c"
+            "${SourceListPrefix}*.h"
         )
     elseif(${Language} STREQUAL "D")
         file(GLOB_RECURSE SourceList
-            "*.d"
+            "${SourceListPrefix}*.d"
         )
     else()
         message(FATAL_ERROR "CreateTarget: unsupported language: ${Language}")
@@ -26,8 +28,12 @@ macro(CreateTarget CMakeTargetName Type OutputName Language LanguageVersion)
         add_executable(${CMakeTargetName} ${SourceList})
     elseif(${Type} STREQUAL "SHARED")
         add_library(${CMakeTargetName} SHARED ${SourceList})
+        add_library(${CMakeTargetName}_ginterface INTERFACE)
+        add_library(libs::${CMakeTargetName} ALIAS ${CMakeTargetName}_ginterface)
     elseif(${Type} STREQUAL "STATIC")
         add_library(${CMakeTargetName} STATIC ${SourceList})
+        add_library(${CMakeTargetName}_ginterface INTERFACE)
+        add_library(libs::${CMakeTargetName} ALIAS ${CMakeTargetName}_ginterface)
     else()
         message(FATAL_ERROR "CreateTarget: unsupported type: ${Type}")
     endif()
@@ -49,8 +55,15 @@ macro(CreateTarget CMakeTargetName Type OutputName Language LanguageVersion)
     endif()
 
     # add current directory to include paths of the target
-    target_include_directories(${CMakeTargetName} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+    target_include_directories(${CMakeTargetName} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/${SourceListPrefix}")
+    target_include_directories(${CMakeTargetName}_ginterface INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/${SourceListPrefix}")
 
     # export variable with the current target source directory
     set(CURRENT_TARGET_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+endmacro()
+
+macro(CreateTargetFromPath CMakeTargetName Path Type OutputName Language LanguageVersion)
+    set(SourceListPrefix "${Path}/")
+    CreateTarget(${CMakeTargetName} ${Type} ${OutputName} ${Language} ${LanguageVersion})
+    set(SourceListPrefix "")
 endmacro()

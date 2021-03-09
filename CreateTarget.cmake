@@ -26,6 +26,7 @@ macro(CreateTarget CMakeTargetName Type OutputName Language LanguageVersion)
     # create target
     if (${Type} STREQUAL "EXECUTABLE")
         add_executable(${CMakeTargetName} ${SourceList})
+        add_library(${CMakeTargetName}_ginterface INTERFACE)
     elseif(${Type} STREQUAL "SHARED")
         add_library(${CMakeTargetName} SHARED ${SourceList})
         add_library(${CMakeTargetName}_ginterface INTERFACE)

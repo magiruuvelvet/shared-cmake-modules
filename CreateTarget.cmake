@@ -43,6 +43,7 @@ macro(CreateTarget CMakeTargetName Type OutputName Language LanguageVersion)
     set_target_properties(${CMakeTargetName} PROPERTIES PREFIX "")
     set_target_properties(${CMakeTargetName} PROPERTIES OUTPUT_NAME "${OutputName}")
 
+    # set target properties
     if (${Language} STREQUAL "C++")
         # sets the required C++ version on the target
         SetCppStandard(${CMakeTargetName} ${LanguageVersion})
@@ -63,9 +64,6 @@ macro(CreateTarget CMakeTargetName Type OutputName Language LanguageVersion)
     if (NOT ${Type} STREQUAL "EXECUTABLE")
         target_link_libraries(${CMakeTargetName}_ginterface INTERFACE ${CMakeTargetName})
     endif()
-
-    # export variable with the current target source directory
-    set(CURRENT_TARGET_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 endmacro()
 
 macro(CreateTargetFromPath CMakeTargetName Path Type OutputName Language LanguageVersion)

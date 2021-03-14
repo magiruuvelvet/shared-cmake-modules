@@ -55,8 +55,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -Wno-unknown-pragmas -Wno-switch -Wno-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=implicit-function-declaration")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
 
-# C/C++: debugger tuning when in debug mode
-# Debug mode flags
+# debug mode flags
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     message(STATUS "Building with development configuration.")
 

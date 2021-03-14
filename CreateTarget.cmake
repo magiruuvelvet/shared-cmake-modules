@@ -56,6 +56,9 @@ macro(CreateTarget CMakeTargetName Type OutputName Language LanguageVersion)
         set_target_properties(${CMakeTargetName} PROPERTIES LINKER_LANGUAGE D)
     endif()
 
+    # setup target platform macros
+    ProjectSetupRegisterPlatformMacros(${CMakeTargetName})
+
     # add current directory to include paths of the target
     target_include_directories(${CMakeTargetName} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/${SourceListPrefix}")
     target_include_directories(${CMakeTargetName}_ginterface INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/${SourceListPrefix}")

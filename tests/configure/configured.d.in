@@ -1,0 +1,3 @@
+module configured;
+
+immutable string configured = "${CMAKE_SOME_VALUE}";

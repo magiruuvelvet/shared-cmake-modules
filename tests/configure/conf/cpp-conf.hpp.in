@@ -1,0 +1,3 @@
+#pragma once
+
+static const char *configured = "${CMAKE_SOME_VALUE}";

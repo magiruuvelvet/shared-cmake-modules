@@ -75,3 +75,25 @@ macro(ProjectSetupRegisterPlatformMacros Target)
     ProjectSetupAppendCCxxFlags(${Target} "-DPROJECT_PLATFORM_NAME=\"${PROJECT_PLATFORM_OS}\"")
 endmacro()
 
+# Parameter:
+#  - Target
+#  - Name (without the .in extension)
+macro(ProjectConfigureFile Target Name)
+    # check for required variables
+    if ("${PROJECT_GENERATED_DIR}" STREQUAL "")
+        message(FATAL_ERROR "ProjectConfigureFile requires $PROJECT_GENERATED_DIR to be set. Did you forgot to include ProjectSetup?")
+    endif()
+
+    # create output path if not inside root
+    get_filename_component(ProjectConfigureFileOutputPath ${Name} DIRECTORY)
+    file(MAKE_DIRECTORY "${PROJECT_GENERATED_DIR}/${ProjectConfigureFileOutputPath}")
+
+    # configure file wrapper
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/${Name}.in"
+        "${PROJECT_GENERATED_DIR}/${Name}"
+    )
+
+    # add generated file to target sources
+    target_sources(${Target} PRIVATE "${PROJECT_GENERATED_DIR}/${Name}")
+endmacro()

@@ -1,0 +1,3 @@
+# don't detect language of unit tests and injectors
+tests/* linguist-vendored
+Injectors/* linguist-vendored

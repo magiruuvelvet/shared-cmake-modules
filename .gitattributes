@@ -6,3 +6,5 @@ Injectors/* linguist-vendored
 
 # LanguageSupport ignore list
 LanguageSupport/D/CMakeDCompilerABI.d linguist-vendored
+LanguageSupport/D/CMakePlatformId.di.in linguist-vendored
+LanguageSupport/D/CMakeDCompilerId.d.in linguist-vendored

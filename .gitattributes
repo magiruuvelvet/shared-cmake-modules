@@ -1,3 +1,8 @@
+# linguist rules to ensure the repository shows as 100% CMake
+
 # don't detect language of unit tests and injectors
 tests/* linguist-vendored
 Injectors/* linguist-vendored
+
+# LanguageSupport ignore list
+LanguageSupport/D/CMakeDCompilerABI.d linguist-vendored

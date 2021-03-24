@@ -18,6 +18,7 @@ macro(CreateTarget CMakeTargetName Type OutputName Language LanguageVersion)
     elseif(${Language} STREQUAL "D")
         file(GLOB_RECURSE SourceList
             "${SourceListPrefix}*.d"
+            "${SourceListPrefix}*.di"
         )
     else()
         message(FATAL_ERROR "CreateTarget: unsupported language: ${Language}")
